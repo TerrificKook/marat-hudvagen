@@ -1,0 +1,41 @@
+'use strict';
+const fs=require('fs');
+const path=require('path');
+const {execFileSync}=require('child_process');
+const root=path.resolve(process.argv[2]||path.join(__dirname,'..'));
+const pages=['concepts/index.html','concepts/concept-a/index.html','concepts/concept-b/index.html','concepts/concept-c/index.html','site-final/index.html','site-final/brief.html'];
+if(fs.existsSync(path.join(root,'.nojekyll')))pages.push('index.html');
+const issues=[];let resources=0;
+function target(from,value){
+ if(!value||/^(https?:|tel:|mailto:|data:)/.test(value))return;
+ const [file,hash]=value.split('#');
+ const dest=file?path.resolve(path.dirname(path.join(root,from)),decodeURI(file.split('?')[0])):path.join(root,from);
+ let actual=dest;
+ if(!actual.startsWith(root+path.sep)&&actual!==root){issues.push(`${from}: outside package ${value}`);return;}
+ if(fs.existsSync(actual)&&fs.statSync(actual).isDirectory())actual=path.join(actual,'index.html');
+ if(!fs.existsSync(actual)){issues.push(`${from}: missing ${value}`);return;}
+ resources++;
+ if(hash&&path.extname(actual)==='.html'){
+  const html=fs.readFileSync(actual,'utf8');
+  if(!html.includes(`id="${hash}"`)&&!html.includes(`id='${hash}'`))issues.push(`${from}: missing anchor ${value}`);
+ }
+}
+for(const page of pages){
+ const html=fs.readFileSync(path.join(root,page),'utf8');
+ if((html.match(/<h1\b/g)||[]).length!==1)issues.push(`${page}: H1 count`);
+ const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+ if(new Set(ids).size!==ids.length)issues.push(`${page}: duplicate IDs`);
+ if(!/name="robots" content="noindex/.test(html))issues.push(`${page}: missing noindex`);
+ if(/Контакт уточняется|контакт Марата пока уточняется|TODO/.test(html))issues.push(`${page}: stale placeholder`);
+ for(const m of html.matchAll(/(?:href|src)="([^"]*)"/g))target(page,m[1]);
+ for(const m of html.matchAll(/srcset="([^"]*)"/g))for(const image of m[1].split(','))target(page,image.trim().split(/\s/)[0]);
+}
+for(const file of ['concepts/shared/experience.css','site-final/style.css']){
+ const css=fs.readFileSync(path.join(root,file),'utf8');
+ for(const m of css.matchAll(/url\(['"]?([^'"\)]+)['"]?\)/g))target(file,m[1]);
+}
+for(const file of ['concepts/shared/experience.js','concepts/shared/van-3d.js','site-final/main.js','serve-local.js']){
+ try{execFileSync(process.execPath,['--check',path.join(root,file)]);}catch{issues.push(`${file}: syntax`);}
+}
+console.log(JSON.stringify({pages:pages.length,localReferences:resources,issues,ok:!issues.length},null,2));
+process.exitCode=issues.length?1:0;
