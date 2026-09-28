@@ -4,7 +4,7 @@ const root=path.resolve(process.argv[2]||'.');
 if(!fs.existsSync(path.join(root,'.nojekyll')))throw Error('Expected a separate public checkout with .nojekyll');
 const base='https://terrifickook.github.io/marat-hudvagen/';
 let html=fs.readFileSync(path.join(root,'site-final/index.html'),'utf8');
-html=html.replaceAll('../concepts/shared/','concepts/shared/').replaceAll('"assets/','"site-final/assets/').replaceAll(', assets/',', site-final/assets/').replace('href="site.css"','href="site-final/site.css"').replace('src="site.js"','src="site-final/site.js"').replace('noindex, nofollow','index, follow');
+html=html.replaceAll('../concepts/shared/','concepts/shared/').replaceAll('"assets/','"site-final/assets/').replaceAll('../assets/privacy-notice.','assets/privacy-notice.').replaceAll('../site-final/privacy.html','site-final/privacy.html').replaceAll(', assets/',', site-final/assets/').replace('href="site.css"','href="site-final/site.css"').replace('src="site.js"','src="site-final/site.js"').replace('noindex, nofollow','index, follow');
 html=html.replace('</head>',`<link rel="canonical" href="${base}"><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="Марат - худваген с водителем для съёмок"><meta property="og:description" content="Привезём реквизит и материалы. На площадке кузов станет рабочей базой вашего цеха. Москва и выезды."><meta property="og:url" content="${base}"><meta property="og:image" content="${base}site-final/assets/van-city-1280.webp"></head>`);
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'robots.txt'),`User-agent: *\nAllow: /marat-hudvagen/\nSitemap: ${base}sitemap.xml\n`);
