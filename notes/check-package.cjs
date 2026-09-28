@@ -25,16 +25,17 @@ for(const page of pages){
  if((html.match(/<h1\b/g)||[]).length!==1)issues.push(`${page}: H1 count`);
  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
  if(new Set(ids).size!==ids.length)issues.push(`${page}: duplicate IDs`);
- if(!/name="robots" content="noindex/.test(html))issues.push(`${page}: missing noindex`);
+ if(page==='index.html'?!/name="robots" content="index, follow/.test(html):!/name="robots" content="noindex/.test(html))issues.push(`${page}: missing noindex`);
+ if(/\b(?:2019|2009)\b/.test(html))issues.push(`${page}: vehicle year should be omitted`);
  if(/Контакт уточняется|контакт Марата пока уточняется|TODO/.test(html))issues.push(`${page}: stale placeholder`);
  for(const m of html.matchAll(/(?:href|src)="([^"]*)"/g))target(page,m[1]);
  for(const m of html.matchAll(/srcset="([^"]*)"/g))for(const image of m[1].split(','))target(page,image.trim().split(/\s/)[0]);
 }
-for(const file of ['concepts/shared/experience.css','site-final/style.css']){
+for(const file of ['concepts/shared/experience.css','site-final/style.css','site-final/site.css']){
  const css=fs.readFileSync(path.join(root,file),'utf8');
  for(const m of css.matchAll(/url\(['"]?([^'"\)]+)['"]?\)/g))target(file,m[1]);
 }
-for(const file of ['concepts/shared/experience.js','concepts/shared/van-3d.js','site-final/main.js','serve-local.js']){
+for(const file of ['concepts/shared/experience.js','concepts/shared/van-3d.js','site-final/main.js','site-final/site.js','serve-local.js']){
  try{execFileSync(process.execPath,['--check',path.join(root,file)]);}catch{issues.push(`${file}: syntax`);}
 }
 console.log(JSON.stringify({pages:pages.length,localReferences:resources,issues,ok:!issues.length},null,2));

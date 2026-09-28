@@ -1,2 +1,3 @@
 User-agent: *
-Disallow: /
+Allow: /marat-hudvagen/
+Sitemap: https://terrifickook.github.io/marat-hudvagen/sitemap.xml
