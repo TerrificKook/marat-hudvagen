@@ -2,23 +2,6 @@
 (() => {
   const assetRoot=new URL('../../site-final/assets/',document.currentScript.src).href;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  const maxDialog = document.querySelector('#max-dialog');
-  let maxOpener;
-  document.querySelectorAll('[data-max]').forEach(button => button.addEventListener('click', () => {
-    if (!maxDialog?.showModal) { document.querySelector('.max-fallback').open = true; document.querySelector('.max-fallback').scrollIntoView(); return; }
-    maxOpener = button;
-    maxDialog.querySelector('.copy-status').textContent = '';
-    maxDialog.showModal();
-  }));
-  maxDialog?.querySelector('.close-dialog').addEventListener('click', () => maxDialog.close());
-  maxDialog?.addEventListener('close', () => maxOpener?.focus({preventScroll:true}));
-  maxDialog?.addEventListener('click', event => { if (event.target === maxDialog) { const r=maxDialog.getBoundingClientRect(); if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom) maxDialog.close(); } });
-  document.querySelector('#copy-phone')?.addEventListener('click', async () => {
-    const input=document.querySelector('#max-phone');
-    const status=maxDialog.querySelector('.copy-status');
-    try { await navigator.clipboard.writeText(input.value); status.textContent='Номер скопирован. Откройте MAX и вставьте его в поиск.'; }
-    catch { input.focus(); input.select(); status.textContent='Номер выделен. Скопируйте его вручную и вставьте в поиск MAX.'; }
-  });
   if ('IntersectionObserver' in window) {
     const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in');observer.unobserve(entry.target);}}),{threshold:.08});
     document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));

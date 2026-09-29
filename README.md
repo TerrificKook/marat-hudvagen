@@ -20,7 +20,7 @@
 
 ## Контакты
 
-Марат: +7 963 698-10-01. Звонок и Telegram по номеру. Канал: https://t.me/Art_mmm_mmm. MAX показывает номер с копированием и открывает мессенджер; для прямого чата нужна личная ссылка профиля.
+Марат: +7 963 698-10-01. Звонок и Telegram по номеру. Канал: https://t.me/Art_mmm_mmm. Прямой контакт MAX: https://max.ru/u/f9LHodD0cOJyWwkVK0IOzBzi9cnYJhqR4KUHkZVEpKO9ZInxwAOQDD3dlvk.
 
 ## Запуск и проверка
 
