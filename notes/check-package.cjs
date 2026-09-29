@@ -6,11 +6,22 @@ const root=path.resolve(process.argv[2]||path.join(__dirname,'..'));
 const pages=['concepts/index.html','concepts/concept-a/index.html','concepts/concept-b/index.html','concepts/concept-c/index.html','site-final/index.html','site-final/brief.html','site-final/privacy.html'];
 if(fs.existsSync(path.join(root,'.nojekyll')))pages.push('index.html');
 const issues=[];let resources=0;
+if(pages.includes('index.html')){
+ const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+ for(const name of ['google-site-verification','msvalidate.01'])if(!html.includes(`<meta name="${name}" content="`))issues.push(`index.html: missing ${name} verification`);
+ const yandex=path.join(root,'yandex_6e27c15c6abee37a.html');
+ if(!fs.existsSync(yandex)||!fs.readFileSync(yandex,'utf8').includes('Verification: 6e27c15c6abee37a'))issues.push('missing Yandex Webmaster verification file');
+ const base=`https://${fs.readFileSync(path.join(root,'CNAME'),'utf8').trim().toLowerCase()}/`;
+ if(!html.includes(`<link rel="canonical" href="${base}"`))issues.push('index.html: canonical differs from custom domain');
+ if(!fs.readFileSync(path.join(root,'robots.txt'),'utf8').includes(`Sitemap: ${base}sitemap.xml`))issues.push('robots.txt: sitemap differs from custom domain');
+ if(!fs.readFileSync(path.join(root,'sitemap.xml'),'utf8').includes(`<loc>${base}</loc>`))issues.push('sitemap.xml: URL differs from custom domain');
+}
 const maxUrl='https://max.ru/u/f9LHodD0cOJyWwkVK0IOzBzi9cnYJhqR4KUHkZVEpKO9ZInxwAOQDD3dlvk';
 function target(from,value){
  if(!value||/^(https?:|tel:|mailto:|data:)/.test(value))return;
  const [file,hash]=value.split('#');
- const dest=file?path.resolve(path.dirname(path.join(root,from)),decodeURI(file.split('?')[0])):path.join(root,from);
+ const decoded=file?decodeURI(file.split('?')[0]):'';
+ const dest=file?(decoded.startsWith('/')?path.join(root,decoded.slice(1)):path.resolve(path.dirname(path.join(root,from)),decoded)):path.join(root,from);
  let actual=dest;
  if(!actual.startsWith(root+path.sep)&&actual!==root){issues.push(`${from}: outside package ${value}`);return;}
  if(fs.existsSync(actual)&&fs.statSync(actual).isDirectory())actual=path.join(actual,'index.html');
