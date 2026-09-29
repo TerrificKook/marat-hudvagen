@@ -1,0 +1,34 @@
+name: Stage reviewed privacy changes
+on:
+  push:
+    branches: [fix/privacy-minimal-2026-09-29]
+    paths: [.github/workflows/privacy-apply-reviewed.yml]
+permissions:
+  contents: write
+jobs:
+  review:
+    if: github.ref == 'refs/heads/fix/privacy-minimal-2026-09-29'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Reproduce reviewed transformations and static checks
+        run: |
+          python3 -m pip install --quiet PyYAML
+          python3 - <<'PY'
+          import urllib.request,yaml,os,subprocess
+          url='https://raw.githubusercontent.com/TerrificKook/dinarcraft/5dee043e64f17564f07cb012ce97b92b8cf104b7/.github/workflows/privacy-apply-reviewed.yml'
+          workflow=yaml.safe_load(urllib.request.urlopen(url).read());steps=workflow['jobs']['review']['steps']
+          assert [s.get('name') for s in steps[1:3]]==['Reproduce checksummed source changes','Stage website source only on review branch']
+          env=dict(os.environ,PRIVACY_WORKDIR='/tmp/privacy-review',PRIVACY_REPO=os.environ['GITHUB_REPOSITORY'].split('/')[1])
+          assert env['PRIVACY_REPO']=='marat-hudvagen'
+          for step in steps[1:3]: subprocess.run(['bash','-euo','pipefail','-c',step['run']],env=env,check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: privacy-static-results
+          path: |
+            /tmp/privacy-review/static-results.json
+            /tmp/privacy-review/change_stats.json
+          retention-days: 14
