@@ -30,6 +30,10 @@
 /* Direct contacts in the first screen header. */
 .is-final .site-topbar{gap:20px}
 .is-final .site-topbar .brand{flex-shrink:0}
+.is-final .site-topbar .brand{gap:9px}
+.is-final .site-topbar .brand-truck{width:38px;height:38px;flex:none;border-radius:9px}
+.is-final .site-topbar .brand b{font-size:21px;letter-spacing:-.055em}
+.is-final .site-topbar .brand small{font-size:8px;letter-spacing:.07em}
 .is-final .top-links{display:flex;align-items:center;gap:22px;margin-left:auto;font-size:12px}
 .is-final .top-links a{white-space:nowrap}
 .is-final .header-contacts{display:flex;align-items:center;gap:6px}
@@ -40,6 +44,9 @@
 @media(max-width:700px){
  .is-final .site-topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 4px;padding:13px 20px 11px}
  .is-final .site-topbar .brand{min-width:0}
+ .is-final .site-topbar .brand-truck{width:32px;height:32px}
+ .is-final .site-topbar .brand b{font-size:17px}
+ .is-final .site-topbar .brand small{font-size:7px;letter-spacing:.02em}
  .is-final .header-contacts{grid-column:2;grid-row:1;gap:4px}
  .is-final .header-contact{width:40px;height:40px;min-height:40px;padding:0}
  .is-final .contact-word{display:none}

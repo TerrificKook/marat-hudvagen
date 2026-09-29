@@ -68,7 +68,7 @@
     box(-2.6,2.82+open*.28,panelZ+.067,3.58,.027,.055,'#c4c5b9',panelShift);
     box(-2.6,.86+open*.28,panelZ+.067,3.58,.027,.055,'#c4c5b9',panelShift);
     const textY=1.7+open*.28;
-    face([[-2.18,textY+.58,panelZ+.097],[.37,textY+.58,panelZ+.097],[.37,textY+.08,panelZ+.097],[-2.18,textY+.08,panelZ+.097]].map(panelShift),'#ffc42a',[0,0,1],1,'МАРАТ');
+    face([[-2.18,textY+.58,panelZ+.097],[.37,textY+.58,panelZ+.097],[.37,textY+.08,panelZ+.097],[-2.18,textY+.08,panelZ+.097]].map(panelShift),'#ffc42a',[0,0,1],1,'ХУДВАГЕН');
     // Rear doors split outward as the concept opens.
     const rear=-2.635-open*.52;
     box(rear,.88,-1.04-open*.28,.065,1.02,1.99,'#e7bc35');
@@ -139,7 +139,7 @@
       ctx.globalAlpha=f.alpha;ctx.fillStyle=f.color;ctx.beginPath();f.pts.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]));ctx.closePath();ctx.fill();
       // Matching stroke removes subpixel cracks between faces.
       ctx.strokeStyle=f.color;ctx.lineWidth=.45;ctx.stroke();
-      if(f.label){const a=f.pts[0],b=f.pts[1],d=f.pts[3];ctx.save();ctx.transform((b[0]-a[0])/300,(b[1]-a[1])/300,(d[0]-a[0])/65,(d[1]-a[1])/65,a[0],a[1]);ctx.fillStyle='#303130';ctx.font='900 49px Inter, Arial';ctx.fillText(f.label,0,49);ctx.restore();}
+      if(f.label){const a=f.pts[0],b=f.pts[1],d=f.pts[3];ctx.save();ctx.transform((b[0]-a[0])/300,(b[1]-a[1])/300,(d[0]-a[0])/65,(d[1]-a[1])/65,a[0],a[1]);ctx.fillStyle='#303130';ctx.font='900 49px Inter, Arial';ctx.fillText(f.label,0,49,292);ctx.restore();}
     }
     ctx.globalAlpha=1;
   }
