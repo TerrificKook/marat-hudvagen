@@ -13,7 +13,7 @@
 
 ## Поисковые кабинеты
 
-Созданы и подтверждены ресурсы Яндекс Вебмастера `http://www.hudwagen.ru` и `https://www.hudwagen.ru` одним HTML-файлом. Google Search Console и Bing подтвердили `https://www.hudwagen.ru/` по опубликованным метатегам. Публичный sitemap пока указывает на `terrifickook.github.io/marat-hudvagen/`, поэтому в кабинеты Hudwagen он не отправлен. В этой ветке подготовлены canonical, robots и sitemap для `www.hudwagen.ru`, но они не опубликованы. Оба HTTPS-адреса Hudwagen дают ошибку несовпадения имени сертификата; предупреждение браузера не обходилось.
+Созданы и подтверждены ресурсы Яндекс Вебмастера `http://www.hudwagen.ru` и `https://www.hudwagen.ru` одним HTML-файлом. Google Search Console и Bing подтвердили `https://www.hudwagen.ru/` по опубликованным метатегам. Публичный sitemap пока указывает на `terrifickook.github.io/marat-hudvagen/`, поэтому в кабинеты Hudwagen он не отправлен. Отдельный поисковый PR #3 подготовил canonical, robots и sitemap для `www.hudwagen.ru`, но не слит. Оба HTTPS-адреса Hudwagen дают ошибку несовпадения имени сертификата; предупреждение браузера не обходилось.
 
 ## Оставшееся до активации
 
