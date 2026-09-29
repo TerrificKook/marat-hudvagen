@@ -6,7 +6,7 @@
 
 ## Структура
 
-- `index.html` - основная страница C. Canonical, Open Graph, robots и sitemap в проверочной ветке настроены для www.hudwagen.ru.
+- `index.html` - основная страница C. Canonical, Open Graph, robots и sitemap в проверочной ветке настроены для www.hudwagen.ru; опубликованный `main` пока указывает на GitHub Pages. При будущей сборке сохраняются опубликованные файл Яндекс Вебмастера и метатеги Google/Bing.
 - `site-final/index.html` и `concepts/concept-c/index.html` - сохранённые адреса C, noindex.
 - `site-final/site.css`, `site-final/site.js` - финальная подача и галерея.
 - `concepts/shared/` - базовый дизайн, контакты, Canvas-модель и трансформация.
