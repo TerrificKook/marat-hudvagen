@@ -1,0 +1,8 @@
+{
+  "source": ".",
+  "dirs": [
+    "concepts",
+    "site-final",
+    "assets"
+  ]
+}

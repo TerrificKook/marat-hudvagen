@@ -1,8 +1,0 @@
-.data-notice{position:fixed;right:20px;bottom:18px;z-index:90;width:min(440px,calc(100vw - 32px));display:flex;gap:16px;align-items:center;padding:15px 16px;background:#26222c;color:#fff;border:1px solid #eae7f266;border-radius:9px;box-shadow:0 12px 35px #17151d66;font:13px/1.42 Inter,Arial,sans-serif;letter-spacing:0}
-.data-notice strong{display:block;margin-bottom:4px;font-size:14px;font-weight:750}
-.data-notice p{margin:0;max-width:none;font-size:12px;line-height:1.45}
-.data-notice a{color:#e5ef5a;text-decoration:underline;text-underline-offset:3px}
-.data-notice button{flex:none;min-width:48px;min-height:44px;padding:0 10px;border:0;border-radius:5px;background:#e5ef5a;color:#26222c;font:700 13px/1 Inter,Arial,sans-serif;cursor:pointer}
-.data-notice :is(a,button):focus-visible{outline:3px solid #e5ef5a;outline-offset:4px}
-.has-data-notice .contact-dock{visibility:hidden}
-@media(max-width:700px){.data-notice{left:12px;right:12px;bottom:12px;width:auto;align-items:flex-end;gap:10px;padding:12px}.data-notice strong{font-size:13px;margin-bottom:2px}.data-notice p{font-size:11px;line-height:1.35}.data-notice button{min-width:43px}}
