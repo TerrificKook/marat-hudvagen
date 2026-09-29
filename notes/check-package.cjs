@@ -29,6 +29,10 @@ for(const page of pages){
  if(page==='index.html'?!/name="robots" content="index, follow/.test(html):!/name="robots" content="noindex/.test(html))issues.push(`${page}: missing noindex`);
  if(/\b(?:2019|2009)\b/.test(html))issues.push(`${page}: vehicle year should be omitted`);
  if(/Контакт уточняется|контакт Марата пока уточняется|TODO/.test(html))issues.push(`${page}: stale placeholder`);
+ if(!['concepts/index.html','site-final/privacy.html'].includes(page)){
+  if(/13 000|1 300/.test(html))issues.push(`${page}: outdated tariff`);
+  for(const amount of ['14 000','1 400','65 ₽'])if(!html.includes(amount))issues.push(`${page}: missing tariff ${amount}`);
+ }
  if(!['concepts/index.html'].includes(page)&&!html.includes(`href="${maxUrl}"`))issues.push(`${page}: missing direct MAX contact`);
  if(/web\.max\.ru|data-max|max-dialog|max-fallback/.test(html))issues.push(`${page}: stale MAX fallback`);
  if(/<form\b|<textarea\b|<input\b|<select\b/.test(html))issues.push(`${page}: unexpected input form`);
