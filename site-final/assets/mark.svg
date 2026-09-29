@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="#eac443"/><path d="M12 45V20h7l9 13 9-13h7v25h-8V33l-8 11-8-11v12z" fill="#181b19"/><circle cx="52" cy="41" r="4" fill="#181b19"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Жёлтый худваген Марата">
+  <rect width="64" height="64" rx="12" fill="#26222c"/>
+  <path d="M6 20 13 15h29l-6 5z" fill="#ffe272"/>
+  <path d="M6 20h30v26H6z" fill="#f5c52d"/>
+  <path d="M36 20 42 15v31h-6z" fill="#d79c15"/>
+  <path d="M42 27h7l9 10v9H42z" fill="#f5bc24"/>
+  <path d="M46 30h3l6 7v2h-9z" fill="#3b5962"/>
+  <path d="M5 44h54v5H5z" fill="#e0a51e"/>
+  <path d="M9 28h23" stroke="#fff0a5" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="18" cy="49" r="6" fill="#1a1c22"/>
+  <circle cx="49" cy="49" r="6" fill="#1a1c22"/>
+  <circle cx="18" cy="49" r="2" fill="#aab0aa"/>
+  <circle cx="49" cy="49" r="2" fill="#aab0aa"/>
+</svg>
