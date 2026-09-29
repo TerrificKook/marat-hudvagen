@@ -31,6 +31,14 @@ for(const page of pages){
  if(/Контакт уточняется|контакт Марата пока уточняется|TODO/.test(html))issues.push(`${page}: stale placeholder`);
  if(!['concepts/index.html'].includes(page)&&!html.includes(`href="${maxUrl}"`))issues.push(`${page}: missing direct MAX contact`);
  if(/web\.max\.ru|data-max|max-dialog|max-fallback/.test(html))issues.push(`${page}: stale MAX fallback`);
+ if(/<form\b|<textarea\b|<input\b|<select\b/.test(html))issues.push(`${page}: unexpected input form`);
+ if(['index.html','concepts/concept-c/index.html','site-final/index.html','site-final/brief.html'].includes(page)){
+  const header=html.match(/<header\b[\s\S]*?<\/header>/)?.[0]||'';
+  const sections=page==='site-final/brief.html'?['#van','#rates']:['#real','#terms'];
+  for(const href of [...sections,maxUrl,'https://t.me/+79636981001','tel:+79636981001']){
+   if(!header.includes(`href="${href}"`))issues.push(`${page}: missing header link ${href}`);
+  }
+ }
  for(const m of html.matchAll(/(?:href|src)="([^"]*)"/g))target(page,m[1]);
  for(const m of html.matchAll(/srcset="([^"]*)"/g))for(const image of m[1].split(','))target(page,image.trim().split(/\s/)[0]);
 }

@@ -77,41 +77,6 @@ if (lightbox && typeof lightbox.showModal === "function") {
   });
 }
 
-const builder = document.querySelector(".brief-builder");
-if (builder) {
-  const form = document.querySelector("#brief-form");
-  const intent = document.querySelector("#intent");
-  const message = document.querySelector("#message");
-  const status = document.querySelector("#copy-status");
-  form.addEventListener("submit", event => {
-    event.preventDefault();
-    const dates = document.querySelector("#dates").value.trim();
-    const task = document.querySelector("#task").value.trim();
-    message.value = ["Марат, здравствуйте!", `Хочу обсудить: ${intent.value.toLowerCase()}.`,
-      `Даты / период: ${dates || "нужно согласовать"}.`,
-      `Задача и маршрут: ${task || "расскажу при общении"}.`,
-      "Подскажите, пожалуйста, доступность, подходящий комплект и условия."].join("\n\n");
-    document.querySelector("#brief-result").hidden = false;
-    status.textContent = "Текст подготовлен. Сообщение не отправлено.";
-    message.focus();
-  });
-  document.querySelectorAll("[data-intent]").forEach(link => link.addEventListener("click", () => {
-    intent.value = link.dataset.intent;
-  }));
-  document.querySelector("#copy-message").addEventListener("click", async () => {
-    try {
-      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
-      await navigator.clipboard.writeText(message.value);
-      status.textContent = "Скопировано. Откройте Telegram или MAX и вставьте текст в сообщение Марату.";
-    } catch {
-      message.focus();
-      message.select();
-      status.textContent = "Не удалось скопировать автоматически. Текст выделен: используйте «Копировать» в меню или Ctrl+C / ⌘C.";
-    }
-  });
-  builder.hidden = false;
-}
-
 const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
 if ("IntersectionObserver" in window && !motionPreference.matches) {
   const observer = new IntersectionObserver(entries => {

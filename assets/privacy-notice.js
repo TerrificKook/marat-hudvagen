@@ -13,7 +13,7 @@
   title.id = 'data-notice-title';
   title.textContent = 'О данных на сайте';
   const message = document.createElement('p');
-  message.append('Сайт запоминает в браузере только нажатие OK. Текст формы не отправляется. GitHub Pages фиксирует IP для безопасности. ');
+  message.append('Сайт запоминает в браузере только нажатие OK. На сайте нет формы для ввода данных. GitHub Pages фиксирует IP для безопасности. ');
   const details = document.createElement('a');
   details.href = new URL('../site-final/privacy.html', document.currentScript.src).href;
   details.textContent = 'Подробнее';
