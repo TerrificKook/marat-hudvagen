@@ -101,7 +101,7 @@ def main():
         latest_main(sha, config['repository'])
     body = b'' if args.rollback_sha else payload(TOOLS.parent / 'dist-regru', sha, config['repository'])
     remote_code = (TOOLS / 'regru_remote.py').read_text('utf-8')
-    command = ['python3', '-c', remote_code, 'rollback' if args.rollback_sha else 'deploy',
+    command = [config['remote_python'], '-c', remote_code, 'rollback' if args.rollback_sha else 'deploy',
                '--root', env['REGRU_PATH'], '--domain', config['domain'],
                '--repo', config['repository'], '--sha', sha]
     with tempfile.TemporaryDirectory(prefix='regru-ssh-') as td:

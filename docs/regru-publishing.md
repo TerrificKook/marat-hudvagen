@@ -8,7 +8,10 @@ settings and an individual SSH key are provisioned only after owner approval.
 Each site must have its own verified document root. The server's independently
 verified host key is required; certificate validation is never disabled. A
 non-public site marker is provisioned separately after the exact root is checked.
-The remote account must provide Python 3.8+ and OpenSSH. One hosting SSH account
+The remote account must provide Python 3.8+. The interpreter is pinned in
+public-files.json because the server default python3 is older. The installed
+/opt/python/python-3.8.8/bin/python reports Python 3.8.6 in a clean shell.
+The runner uses the OpenSSH client; the remote SSH service must be verified separately. One hosting SSH account
 can access all sites; separate keys provide revocation, not user isolation.
 
 The deploy engine replaces individual managed files and retains release ZIPs and
