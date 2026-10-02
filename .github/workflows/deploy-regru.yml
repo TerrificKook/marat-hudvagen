@@ -1,0 +1,80 @@
+name: Publish to REG.RU
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      rollback_sha:
+        description: 'Full accepted SHA to restore; leave blank for the current main'
+        required: false
+        default: ''
+        type: string
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5, verified via official repository
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Exercise isolated delivery and rollback guards
+        run: python tools/test_regru.py -v
+      - name: Create and validate the public package
+        run: |
+          python tools/package_public.py
+          python tools/check_public.py
+          python -c "from pathlib import Path; import subprocess; [subprocess.run(['node','--check',str(f)],check=True) for f in Path('dist-regru').rglob('*.js')]"
+  deploy:
+    needs: checks
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      vars.REGRU_DEPLOY_ENABLED == 'true' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'push' && vars.REGRU_AUTO_DEPLOY == 'true'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    concurrency:
+      group: regru-${{ github.repository }}
+      cancel-in-progress: false
+    environment:
+      name: regru-production
+      url: ${{ vars.SITE_URL }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5, verified via official repository
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Exercise isolated delivery and rollback guards
+        run: python tools/test_regru.py -v
+      - name: Create and validate the public package
+        run: |
+          python tools/package_public.py
+          python tools/check_public.py
+          python -c "from pathlib import Path; import subprocess; [subprocess.run(['node','--check',str(f)],check=True) for f in Path('dist-regru').rglob('*.js')]"
+      - name: Deliver and verify the public HTTPS version
+        env:
+          REGRU_HOST: ${{ vars.REGRU_HOST }}
+          REGRU_PORT: ${{ vars.REGRU_PORT }}
+          REGRU_USER: ${{ vars.REGRU_USER }}
+          REGRU_PATH: ${{ vars.REGRU_PATH }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          REGRU_DEPLOY_ENABLED: ${{ vars.REGRU_DEPLOY_ENABLED }}
+          REGRU_AUTO_DEPLOY: ${{ vars.REGRU_AUTO_DEPLOY }}
+          REGRU_SSH_PRIVATE_KEY: ${{ secrets.REGRU_SSH_PRIVATE_KEY }}
+          REGRU_KNOWN_HOSTS: ${{ secrets.REGRU_KNOWN_HOSTS }}
+          ROLLBACK_SHA: ${{ inputs.rollback_sha }}
+        run: python tools/deploy_regru.py --rollback-sha "$ROLLBACK_SHA"

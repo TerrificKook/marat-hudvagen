@@ -4,5 +4,14 @@
     "concepts",
     "site-final",
     "assets"
+  ],
+  "domain": "hudwagen.ru",
+  "site_url": "https://www.hudwagen.ru/",
+  "repository": "TerrificKook/marat-hudvagen",
+  "root_files": [
+    "index.html",
+    "robots.txt",
+    "sitemap.xml",
+    "yandex_6e27c15c6abee37a.html"
   ]
 }
