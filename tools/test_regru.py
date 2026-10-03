@@ -38,7 +38,9 @@ class Releases(unittest.TestCase):
         output = io.BytesIO()
         with zipfile.ZipFile(output, 'w') as z:
             for name, value in data.items():
-                z.writestr(name, value)
+                # Match production: identical releases must not depend on the clock.
+                info = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0))
+                z.writestr(info, value)
         return output.getvalue()
 
     def deploy(self, sha, extra=None):
