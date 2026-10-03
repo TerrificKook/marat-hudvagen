@@ -33,7 +33,8 @@ Hudwagen keeps its canonical https://www.hudwagen.ru/ address with the exact roo
 .htaccess in the managed package. In ispmanager, PHP must use FastCGI (Apache)
 (tested with PHP 8.4.25), while the panel's domain redirect stays disabled and
 HTTP-to-HTTPS stays enabled. No PHP website or application files are published.
-The rule preserves the original path and query, excludes the ACME challenge path,
+The rule takes the raw encoded path from THE_REQUEST and preserves the query,
+including encoded # and percent characters; it excludes the ACME challenge path,
 and avoids a redirect through HTTP. Apache applies it to pages and JSON/TXT/XML;
 Nginx serves CSS/JS/images directly on either hostname over HTTPS. These assets
 remain available without a host redirect. The .htaccess URL itself returns 403.
