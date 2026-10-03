@@ -1,5 +1,9 @@
 # Managed canonical redirect; automatic publication smoke test
 RewriteEngine On
+# Redirect only an explicit request; the internal DirectoryIndex must stay at /.
+RewriteCond %{THE_REQUEST} \s/+index\.html[?\s] [NC]
+RewriteRule ^index\.html$ https://www.hudwagen.ru/ [R=301,L,NE]
+
 RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
 RewriteCond %{HTTP_HOST} !^www\.hudwagen\.ru(?::443)?$ [NC]
 RewriteCond %{THE_REQUEST} \s(/[^?\s]*)[?\s]

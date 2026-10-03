@@ -12,7 +12,22 @@ const verificationTags=[...currentRoot.matchAll(/<meta name="(?:google-site-veri
 if(verificationTags.length!==2||!verificationTags.some(tag=>tag.includes('google-site-verification'))||!verificationTags.some(tag=>tag.includes('msvalidate.01')))throw Error('Missing published Google/Bing verification meta tags');
 let html=fs.readFileSync(path.join(root,'site-final/index.html'),'utf8');
 html=html.replaceAll('../concepts/shared/','concepts/shared/').replaceAll('"assets/','"site-final/assets/').replaceAll('../assets/privacy-notice.','assets/privacy-notice.').replaceAll('../site-final/privacy.html','site-final/privacy.html').replaceAll(', assets/',', site-final/assets/').replace('href="site.css"','href="site-final/site.css"').replace('src="site.js"','src="site-final/site.js"').replace('src="consent-metrika.js"','src="site-final/consent-metrika.js"').replace('noindex, nofollow','index, follow');
-html=html.replace('</head>',`${verificationTags.join('')}<link rel="canonical" href="${base}"><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="Марат - худваген с водителем для съёмок"><meta property="og:description" content="Привезём реквизит и материалы. На площадке кузов станет рабочей базой вашего цеха. Москва и выезды."><meta property="og:url" content="${base}"><meta property="og:image" content="${base}site-final/assets/van-city-1280.webp"></head>`);
+const title=html.match(/<title>([^<]+)<\/title>/)?.[1];
+const description=html.match(/<meta name="description" content="([^"]+)">/)?.[1];
+if(!title||!description)throw Error('Missing homepage metadata');
+const service={
+  '@context':'https://schema.org',
+  '@type':'Service',
+  '@id':`${base}#service`,
+  name:'Худваген с водителем для съёмок',
+  serviceType:'Худваген с водителем для художественного цеха',
+  description:'Худваген с водителем, доставка реквизита и материалов и рабочая база на съёмочной площадке. Москва и Московская область; другие регионы по договорённости.',
+  url:base,
+  provider:{'@type':'Person',name:'Марат',telephone:'+79636981001'},
+  areaServed:[{'@type':'City',name:'Москва'},{'@type':'AdministrativeArea',name:'Московская область'}]
+};
+const structuredData=JSON.stringify(service).replaceAll('<','\\u003c');
+html=html.replace('</head>',`${verificationTags.join('')}<link rel="canonical" href="${base}"><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="${base}"><meta property="og:image" content="${base}site-final/assets/van-city-1280.webp"><script type="application/ld+json">${structuredData}</script></head>`);
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${base}sitemap.xml\n`);
 fs.writeFileSync(path.join(root,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${base}</loc></url></urlset>\n`);

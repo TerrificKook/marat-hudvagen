@@ -1,8 +1,8 @@
 "use strict";
 
-// Release gate: switch enabled on only after the site's notice and operator are approved.
+// Owner approved activation on 2026-10-03; visitor consent is still required.
 (() => {
-  const config = { enabled: false, counterId: 113163390, hosts: ["www.hudwagen.ru", "hudwagen.ru"], notice: "/site-final/analytics-consent.html", contactGoal: "contact_click", contentGoal: "content_open", contentPaths: [] };
+  const config = { enabled: true, counterId: 113163390, hosts: ["www.hudwagen.ru", "hudwagen.ru"], notice: "/site-final/analytics-consent.html", contactGoal: "contact_click", contentGoal: "content_open", contentPaths: [] };
   if (!config.enabled || !Number.isSafeInteger(config.counterId) ||
       !config.hosts.includes(location.hostname)) return;
 
