@@ -11,7 +11,7 @@ const currentRoot=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const verificationTags=[...currentRoot.matchAll(/<meta name="(?:google-site-verification|msvalidate\.01)" content="[^"]+">/g)].map(match=>match[0]);
 if(verificationTags.length!==2||!verificationTags.some(tag=>tag.includes('google-site-verification'))||!verificationTags.some(tag=>tag.includes('msvalidate.01')))throw Error('Missing published Google/Bing verification meta tags');
 let html=fs.readFileSync(path.join(root,'site-final/index.html'),'utf8');
-html=html.replaceAll('../concepts/shared/','concepts/shared/').replaceAll('"assets/','"site-final/assets/').replaceAll('../assets/privacy-notice.','assets/privacy-notice.').replaceAll('../site-final/privacy.html','site-final/privacy.html').replaceAll(', assets/',', site-final/assets/').replace('href="site.css"','href="site-final/site.css"').replace('src="site.js"','src="site-final/site.js"').replace('src="consent-metrika.js"','src="site-final/consent-metrika.js"').replace('noindex, nofollow','index, follow');
+html=html.replaceAll('../concepts/shared/','concepts/shared/').replaceAll('"assets/','"site-final/assets/').replaceAll('../assets/privacy-notice.','assets/privacy-notice.').replaceAll('../site-final/privacy.html','site-final/privacy.html').replaceAll(', assets/',', site-final/assets/').replace('href="site.css"','href="site-final/site.css"').replace('src="site.js"','src="site-final/site.js"').replace('src="consent-metrika.js','src="site-final/consent-metrika.js').replace('noindex, nofollow','index, follow');
 const title=html.match(/<title>([^<]+)<\/title>/)?.[1];
 const description=html.match(/<meta name="description" content="([^"]+)">/)?.[1];
 if(!title||!description)throw Error('Missing homepage metadata');
