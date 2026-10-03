@@ -32,6 +32,9 @@ def safe_name(name):
     p = PurePosixPath(name)
     if not name or p.as_posix() != name or p.is_absolute() or '\\' in name or '..' in p.parts:
         fail("Unsafe release filename")
+    # A one-component root path is the sole server-configuration exception.
+    if len(p.parts) == 1 and p.parts[0] == '.htaccess':
+        return p
     if any(part.startswith('.') or part in {'docs', 'notes', 'tools', 'tests',
             'research', 'output', 'node_modules', '_project_context'} for part in p.parts):
         fail("Internal or service file in release")

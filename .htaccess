@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
+RewriteCond %{HTTP_HOST} !^www\.hudwagen\.ru(?::443)?$ [NC]
+RewriteRule ^ https://www.hudwagen.ru%{REQUEST_URI} [R=301,L,NE]

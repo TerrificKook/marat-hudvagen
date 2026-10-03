@@ -28,3 +28,16 @@ Public version.json must match the expected SHA over verified HTTPS.
 Do not merge the preparation branch before the site's transfer approval. A merge
 can also trigger the existing GitHub Pages publishing. Old Pages settings remain
 available as part of the rollback plan and are not disabled by this workflow.
+
+Hudwagen keeps its canonical https://www.hudwagen.ru/ address with the exact root
+.htaccess in the managed package. In ispmanager, PHP must use FastCGI (Apache)
+(tested with PHP 8.4.25), while the panel's domain redirect stays disabled and
+HTTP-to-HTTPS stays enabled. No PHP website or application files are published.
+The rule preserves the original path and query, excludes the ACME challenge path,
+and avoids a redirect through HTTP. Apache applies it to pages and JSON/TXT/XML;
+Nginx serves CSS/JS/images directly on either hostname over HTTPS. These assets
+remain available without a host redirect. The .htaccess URL itself returns 403.
+Only the exact root .htaccess is allowed; nested hidden files, .env, internal
+folders and backups remain rejected. Release delivery and rollback manage this
+configuration together with the pages. SSL HTTP renewal is verified separately
+after the approved DNS switch; initial certificate issuance is not renewal proof.

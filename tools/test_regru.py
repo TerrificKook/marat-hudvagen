@@ -1,5 +1,8 @@
 """Exercise real file delivery/rollback and rejection cases in temporary sites."""
 import io
+import os
+import shutil
+import sys
 import json
 from pathlib import Path
 import tempfile
@@ -59,6 +62,41 @@ class Releases(unittest.TestCase):
         self.deploy('b' * 40, {'new.css': 'two'})
         self.assertIn('b' * 40, (self.root / 'version.json').read_text())
 
+    def test_root_config_release_and_rollback(self):
+        service = self.root / '.well-known' / 'acme-challenge'
+        service.mkdir(parents=True)
+        (service / 'untouched').write_text('challenge')
+        self.deploy('a' * 40, {'.htaccess': 'RewriteEngine On\n# first\n'})
+        self.deploy('b' * 40, {'.htaccess': 'RewriteEngine On\n# second\n'})
+        old = (self.state / 'releases' / ('a' * 40 + '.zip')).read_bytes()
+        remote.apply(str(self.root), self.domain, self.repo, 'a' * 40, old, self.home)
+        self.assertEqual((self.root / '.htaccess').read_text(), 'RewriteEngine On\n# first\n')
+        self.assertEqual((service / 'untouched').read_text(), 'challenge')
+
+    def test_packager_exact_root_config_only(self):
+        project = Path(self.temp.name) / 'package'
+        tools = project / 'tools'
+        tools.mkdir(parents=True)
+        source_tools = Path(__file__).resolve().parent
+        for name in ['package_public.py', 'regru_remote.py']:
+            shutil.copyfile(source_tools / name, tools / name)
+        (project / 'index.html').write_text('<html>public</html>')
+        (project / '.htaccess').write_text('RewriteEngine On\n')
+        (project / '.env').write_text('do-not-publish')
+        hidden = project / 'assets' / '.hidden'
+        hidden.mkdir(parents=True)
+        (hidden / 'data.txt').write_text('do-not-publish')
+        (hidden.parent / '.htaccess').write_text('do-not-publish')
+        (hidden.parent / 'ok.css').write_text('body {}')
+        (tools / 'public-files.json').write_text(json.dumps({'source': '.',
+            'root_files': ['index.html', '.htaccess'], 'dirs': ['assets'], 'repository': self.repo}))
+        result = subprocess.run([sys.executable, str(tools / 'package_public.py')],
+            env=dict(os.environ, GITHUB_SHA='a' * 40), capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        names = {f.relative_to(project / 'dist-regru').as_posix()
+            for f in (project / 'dist-regru').rglob('*') if f.is_file()}
+        self.assertEqual(names, {'index.html', '.htaccess', 'assets/ok.css', 'version.json'})
+
     def test_bad_destinations(self):
         for root in ('', '/', str(self.home), str(self.home / 'www'), str(self.home / 'www' / 'other.ru')):
             with self.subTest(root=root), self.assertRaises((ValueError, FileNotFoundError)):
@@ -69,7 +107,7 @@ class Releases(unittest.TestCase):
             remote.context(str(self.root), self.domain, 'owner/other', self.home)
 
     def test_bad_archive_paths(self):
-        for name in ('../other/index.html', '.env', '.github/workflow.yml', '.well-known/x.txt', 'x//index.html'):
+        for name in ('../other/index.html', '.env', '.github/workflow.yml', '.well-known/x.txt', 'x//index.html', 'assets/.htaccess', '.hidden/.htaccess', '.htaccess.bak', '.env.txt'):
             with self.subTest(name=name), self.assertRaises(ValueError):
                 self.deploy('a' * 40, {name: 'bad'})
         self.assertEqual(list(self.root.iterdir()), [])

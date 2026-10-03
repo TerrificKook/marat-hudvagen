@@ -12,7 +12,8 @@
     "index.html",
     "robots.txt",
     "sitemap.xml",
-    "yandex_6e27c15c6abee37a.html"
+    "yandex_6e27c15c6abee37a.html",
+    ".htaccess"
   ],
   "remote_python": "/opt/python/python-3.8.8/bin/python"
 }

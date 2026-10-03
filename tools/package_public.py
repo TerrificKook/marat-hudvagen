@@ -28,6 +28,11 @@ def copy_file(f):
     rel = f.relative_to(source)
     if f.is_symlink():
         raise SystemExit('Refusing symlink: ' + str(rel))
+    # Publish only the explicitly listed root configuration; no nested exception.
+    if len(rel.parts) == 1 and rel.parts[0] == '.htaccess' and '.htaccess' in config.get('root_files', []):
+        safe_name(rel.as_posix())
+        shutil.copy2(f, dest / '.htaccess')
+        return
     if any(p.startswith('.') or p in {'node_modules', 'docs', 'notes', 'tools', 'tests',
             'output', 'research', '_project_context', '__pycache__'} for p in rel.parts):
         return
