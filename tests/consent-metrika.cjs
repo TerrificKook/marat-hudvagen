@@ -19,7 +19,7 @@ const origin = `https://${config.hosts[0]}`;
 const indexUrl = `${origin}/`;
 const goalPath = config.contentPaths[0] || "/site-final/gallery.html";
 const fixture = `<!doctype html><html lang="ru"><head><meta charset="utf-8"><title>Проверка сайта</title><script src="/test-consent.js" defer></script></head><body><a id="contact" href="tel:+74950000000" onclick="event.preventDefault()">Позвонить</a><a id="content" href="${goalPath}" ${config.contentPaths.length ? "" : "data-photo"} onclick="event.preventDefault()">Материал</a><input id="private" value="private-sentinel@example.test"><footer></footer></body></html>`;
-const fakeTag = `(() => { const prior = window.ym; const queued = prior && prior.a || []; window.__ymCalls = window.__ymCalls || []; window.ym = (...args) => window.__ymCalls.push(args); for (const args of queued) window.ym(...args); })();`;
+const fakeTag = `(() => { const prior = window.ym; const queued = prior && prior.a || []; window.__ymCalls = window.__ymCalls || []; window.ym = (...args) => { window.__ymCalls.push(args); if (args[1] === "init" && args[2]?.triggerEvent) document.dispatchEvent(new Event("yacounter" + args[0] + "inited")); }; for (const args of queued) window.ym(...args); })();`;
 let passed = 0;
 let failed = 0;
 let browser;
@@ -38,6 +38,7 @@ async function setup(options = {}) {
     const url = new URL(request.url());
     if (url.hostname === "mc.yandex.ru") {
       requests.push(request.url());
+      if (options.blockTag) return route.abort("blockedbyclient");
       if (options.delayTag) await new Promise(resolve => setTimeout(resolve, 500));
       return route.fulfill({ status: 200, contentType: "application/javascript", body: fakeTag });
     }
@@ -112,6 +113,37 @@ async function allow(page) {
     await page.goto(`${indexUrl}?email=private-sentinel%40example.test`);
     await page.getByRole("button", { name: "Разрешить аналитику" }).click();
     assert.equal(requests.length, 0);
+    await context.close();
+  });
+
+  await check("official debugger launches but unknown debug values fail closed", async () => {
+    const { context, page, requests } = await setup();
+    await page.goto(`${indexUrl}?_ym_debug=2`);
+    await allow(page);
+    assert.equal((await calls(page, "hit"))[0][2], indexUrl);
+    await page.getByRole("button", { name: "Настройки аналитики" }).click();
+    assert.match(await page.locator(".analytics-status").innerText(), /Счётчик запущен/);
+    const before = requests.length;
+    await page.goto(`${indexUrl}?_ym_debug=private-sentinel`);
+    await page.getByRole("button", { name: "Настройки аналитики" }).click();
+    assert.equal(requests.length, before);
+    assert.match(await page.locator(".analytics-status").innerText(), /дополнительные параметры не разрешены/);
+    await context.close();
+  });
+
+  await check("blocked SDK reports load failure; revoke keeps analytics disabled", async () => {
+    const { context, page, requests } = await setup({ blockTag: true });
+    await page.goto(indexUrl);
+    await page.getByRole("button", { name: "Разрешить аналитику" }).click();
+    await page.getByRole("button", { name: "Настройки аналитики" }).click();
+    await page.locator(".analytics-status").filter({ hasText: "Метрика не загрузилась" }).waitFor();
+    assert.equal(requests.length, 1);
+    assert.equal((await calls(page, "hit")).length, 0);
+    await page.getByRole("button", { name: "Без аналитики" }).click();
+    await page.reload();
+    await page.getByRole("button", { name: "Настройки аналитики" }).click();
+    assert.equal(await page.locator(".analytics-status").innerText(), "Аналитика выключена.");
+    assert.equal(requests.length, 1);
     await context.close();
   });
 

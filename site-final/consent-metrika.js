@@ -20,7 +20,16 @@
   let script;
   let inputObserver;
   let expiryTimer;
+  let loadTimer;
+  let initialized = false;
+  let statusText = "Аналитика выключена до вашего разрешения.";
   const channel = typeof BroadcastChannel === "function" ? new BroadcastChannel(key) : null;
+
+  function setStatus(text) {
+    statusText = text;
+    const status = panel?.querySelector(".analytics-status");
+    if (status && status.textContent !== text) status.textContent = text;
+  }
 
   function fallbackDenied() {
     try {
@@ -86,7 +95,10 @@
     const input = new URLSearchParams(location.search);
     // Fail closed on unknown query parameters: Metrika and Webvisor may inspect location.href.
     for (const [name, value] of input) {
-      if (name === "yclid" && /^[a-zA-Z0-9_-]{1,200}$/.test(value)) {
+      if (name === "_ym_debug" && value === "2") {
+        // Official debugger flag is safe; omit it from the recorded page URL.
+        continue;
+      } else if (name === "yclid" && /^[a-zA-Z0-9_-]{1,200}$/.test(value)) {
         url.searchParams.append(name, value);
       } else if (/^utm_(source|medium|campaign|content|term)$/.test(name) &&
           value.length <= 100 && /^[\p{L}\p{N} _.,:+/-]+$/u.test(value) &&
@@ -129,6 +141,8 @@
     if (persistDeny) setFallbackDenied();
     if (broadcast) channel?.postMessage("deny");
     clearTimeout(expiryTimer);
+    clearTimeout(loadTimer);
+    setStatus("Аналитика выключена.");
     if (script && !script.dataset.loaded) script.remove();
     inputObserver?.disconnect();
     // Yandex documents destruct for an already initialized counter.
@@ -141,13 +155,17 @@
   function start() {
     if (started || revoked || readChoice() !== "allow") return;
     const url = safeUrl();
-    if (!url) return; // Unknown/sensitive query values may be read by the library itself.
+    if (!url) {
+      setStatus("На этом адресе аналитика не запускается: дополнительные параметры не разрешены. Для проверки откройте главную без параметров.");
+      return; // Unknown/sensitive query values may be read by the library itself.
+    }
     protectInputs();
     inputObserver = new MutationObserver(records => {
       for (const record of records) for (const node of record.addedNodes) protectInputs(node);
     });
     inputObserver.observe(document.documentElement, { childList: true, subtree: true });
     started = true;
+    setStatus("Разрешение сохранено. Метрика загружается.");
     window[disableKey] = false;
     window.ym = window.ym || function () { (window.ym.a = window.ym.a || []).push(arguments); };
     window.ym.l = Date.now();
@@ -155,10 +173,26 @@
     script.async = true;
     script.referrerPolicy = "no-referrer";
     script.src = `https://mc.yandex.ru/metrika/tag.js?id=${config.counterId}`;
-    script.addEventListener("load", () => { script.dataset.loaded = "1"; });
+    document.addEventListener(`yacounter${config.counterId}inited`, () => {
+      if (revoked) return;
+      initialized = true;
+      clearTimeout(loadTimer);
+      setStatus("Счётчик запущен. Получение данных проверяется в кабинете Метрики.");
+    }, { once: true });
+    script.addEventListener("load", () => {
+      script.dataset.loaded = "1";
+      if (!revoked && !initialized) setStatus("Библиотека Метрики загружена. Запуск счётчика ещё не подтверждён.");
+    });
+    script.addEventListener("error", () => {
+      clearTimeout(loadTimer);
+      if (!revoked) setStatus("Метрика не загрузилась. Возможна блокировка браузером или сетью. Разрешение сохранено.");
+    });
+    loadTimer = setTimeout(() => {
+      if (!revoked && !initialized) setStatus("Запуск Метрики не подтверждён. Разрешение сохранено.");
+    }, 12000);
     document.head.appendChild(script);
     window.ym(config.counterId, "init", {
-      defer: true, webvisor: true, clickmap: true, trackLinks: true,
+      ssr: true, triggerEvent: true, defer: true, webvisor: true, clickmap: true, trackLinks: true,
       accurateTrackBounce: true, disableYtm: true, ecommerce: false, sendTitle: false,
       url, referrer: safeReferrer()
     });
@@ -189,7 +223,8 @@
     panel.className = "analytics-choice";
     panel.setAttribute("role", "region");
     panel.setAttribute("aria-label", "Выбор аналитики");
-    panel.innerHTML = `<p>Разрешаете Яндекс Метрику для анализа посещений, рекламы, кликов, прокрутки и записи действий без ввода текста? До выбора она не загружается. <a href="${config.notice}">Условия и текст согласия</a>.</p><div class="analytics-choice-actions"><button type="button" data-choice="allow">Разрешить аналитику</button><button type="button" data-choice="deny">Без аналитики</button></div><p class="analytics-error" hidden role="status">Не удалось сохранить выбор. На этой странице аналитика выключена; перед следующим посещением проверьте выбор снова.</p>`;
+    panel.innerHTML = `<p>Разрешаете Яндекс Метрику для анализа посещений, рекламы, кликов, прокрутки и записи действий без ввода текста? До выбора она не загружается. <a href="${config.notice}">Условия и текст согласия</a>.</p><div class="analytics-choice-actions"><button type="button" data-choice="allow">Разрешить аналитику</button><button type="button" data-choice="deny">Без аналитики</button></div><p class="analytics-status" role="status"></p><p class="analytics-error" hidden role="status">Не удалось сохранить выбор. На этой странице аналитика выключена; перед следующим посещением проверьте выбор снова.</p>`;
+    setStatus(statusText);
     panel.addEventListener("click", event => {
       const button = event.target.closest("button[data-choice]");
       if (!button) return;
@@ -243,6 +278,7 @@
 
   function ready() {
     const choice = readChoice();
+    if (choice === "deny") setStatus("Аналитика выключена.");
     window[disableKey] = choice !== "allow";
     const footer = document.querySelector("footer, .footer-note, .privacy-footer") || document.body;
     const button = document.createElement("button");
