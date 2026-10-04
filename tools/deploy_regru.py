@@ -100,10 +100,11 @@ def main():
     if not args.rollback_sha:
         latest_main(sha, config['repository'])
     body = b'' if args.rollback_sha else payload(TOOLS.parent / 'dist-regru', sha, config['repository'])
-    remote_code = (TOOLS / 'regru_remote.py').read_text('utf-8')
-    command = [config['remote_python'], '-c', remote_code, 'rollback' if args.rollback_sha else 'deploy',
-               '--root', env['REGRU_PATH'], '--domain', config['domain'],
-               '--repo', config['repository'], '--sha', sha]
+    # The fixed, owner-installed receiver cannot be replaced by a repository push.
+    from pathlib import PurePosixPath
+    gateway = PurePosixPath(env['REGRU_PATH']).parent.parent / '.regru-deploy' / 'receiver-v2' / 'regru_gateway.py'
+    command = [config['remote_python'], '-I', str(gateway), config['domain'],
+               'rollback' if args.rollback_sha else 'deploy', sha]
     with tempfile.TemporaryDirectory(prefix='regru-ssh-') as td:
         private = Path(td) / 'deploy_key'
         hosts = Path(td) / 'known_hosts'
@@ -120,7 +121,14 @@ def main():
         result = subprocess.run(ssh, input=body, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if result.returncode:
             raise ValueError('SSH delivery rejected; ' + result.stderr.decode('utf-8', errors='replace').strip()[-500:])
-    verify(env['SITE_URL'], sha, config['repository'])
+        verify(env['SITE_URL'], sha, config['repository'])
+        # Archive rotation is permitted only after public HTTPS verification.
+        command[-2] = 'finalize'
+        finalized = subprocess.run(ssh[:-1] + [' '.join(shlex.quote(a) for a in command)],
+                                   input=b'', stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
+        if finalized.returncode:
+            raise ValueError('Public release verified, but archive finalization failed; ' +
+                             finalized.stderr.decode('utf-8', errors='replace').strip()[-500:])
     print('Public HTTPS release verified: ' + sha)
 
 

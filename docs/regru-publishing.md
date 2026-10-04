@@ -42,3 +42,37 @@ Only the exact root .htaccess is allowed; nested hidden files, .env, internal
 folders and backups remain rejected. Release delivery and rollback manage this
 configuration together with the pages. SSL HTTP renewal is verified separately
 after the approved DNS switch; initial certificate issuance is not renewal proof.
+
+
+## Restricted delivery and retention - 4 October 2026
+
+The four existing SSH keys are bound to a fixed, owner-installed receiver outside
+www. Each key can deploy, roll back, finalize or inspect only its own site. Shell,
+SFTP/SCP, TCP forwarding and foreign destinations are rejected. Python uses -I;
+no source code supplied by a GitHub job is executed. The exact legacy command is
+recognized only for migration compatibility and uses the installed receiver.
+
+The server pins approved .htaccess hashes. Changing server configuration or the
+installed receiver requires a separate owner-controlled panel operation; a push
+cannot replace them. Executable and double-extension filenames, hidden paths,
+symlinks and unexpected archive entries are rejected. This narrows SSH access;
+it is not isolation into separate operating-system accounts. Keep mail separate
+until the mail migration receives its own acceptance.
+
+After public HTTPS version verification, finalize retains the last five accepted
+versions plus the current, previous and explicitly pinned migration versions.
+It retains the five newest pre-deployment backups not older than 30 days.
+Protected ZIPs and their version identities are checked before cleanup. The exact
+candidate list is recorded; cleanup checks each file hash and deletes only named
+ZIP files in the site's own releases/backups directories, without recursion.
+The migration pins do not expire automatically on 10 October. Provider backups
+are independent and are not modified by this policy.
+
+A retry of the current identical payload preserves previous_sha. Failed public
+verification does not trigger archive cleanup. Rollback uses the same fixed
+receiver and an existing full accepted SHA; restoration uses current main.
+
+Tests: python tools/test_regru.py -v; python tools/test_regru_gateway.py -v.
+The additional gateway suite was also executed using the hosting Python in an
+isolated temporary Linux fixture, including real file delivery/rollback, POSIX
+locks, symlink rejection, immutable configuration and retention fail-closed cases.
