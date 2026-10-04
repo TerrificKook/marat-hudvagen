@@ -28,6 +28,8 @@ jobs:
           python-version: '3.12'
       - name: Exercise isolated delivery and rollback guards
         run: python tools/test_regru.py -v
+      - name: Verify analytics routing without sending events
+        run: node tests/analytics-routing.cjs
       - name: Create and validate the public package
         run: |
           python tools/package_public.py

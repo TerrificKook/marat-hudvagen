@@ -2,7 +2,7 @@
 
 // Owner approved activation on 2026-10-03; visitor consent is still required.
 (() => {
-  const config = { enabled: true, counterId: 113163390, hosts: ["www.hudwagen.ru", "hudwagen.ru"], notice: "/site-final/analytics-consent.html", contactGoal: "contact_click", contentGoal: "content_open", contentPaths: [] };
+  const config = { enabled: true, counterId: 113163390, hosts: ["www.hudwagen.ru", "hudwagen.ru"], notice: "/site-final/analytics-consent.html", contactGoal: "contact_click", videoGoal: "video_open", contentGoal: "content_open", contentPaths: [] };
   if (!config.enabled || !Number.isSafeInteger(config.counterId) ||
       !config.hosts.includes(location.hostname)) return;
 
@@ -97,6 +97,10 @@
     for (const [name, value] of input) {
       if (name === "_ym_debug" && value === "2") {
         // Official debugger flag is safe; omit it from the recorded page URL.
+        continue;
+      } else if (name === "v" && value === "20261004") {
+        // Known public preview version only; never accept arbitrary values here.
+        // Keep the recorded URL canonical while preserving advertising attribution.
         continue;
       } else if (name === "yclid" && /^[a-zA-Z0-9_-]{1,200}$/.test(value)) {
         url.searchParams.append(name, value);
@@ -251,10 +255,19 @@
     if (/^mailto:/i.test(href)) return "email";
     try {
       const url = new URL(href, location.href);
-      if (url.hostname === "t.me" || url.hostname === "telegram.me") return "telegram";
+      if ((url.hostname === "t.me" || url.hostname === "telegram.me") &&
+          url.pathname.replace(/\/$/, "") === "/+79636981001") return "telegram";
       if (url.hostname === "max.ru") return "max";
     } catch { /* No contact link. */ }
     return null;
+  }
+
+  function isVideoLink(link) {
+    try {
+      const url = new URL(link.getAttribute("href"), location.href);
+      return (url.hostname === "t.me" || url.hostname === "telegram.me") &&
+        url.pathname.replace(/\/$/, "").toLowerCase() === "/art_mmm_mmm";
+    } catch { return false; }
   }
 
   document.addEventListener("click", event => {
@@ -264,6 +277,8 @@
     const channel = channelOf(link);
     if (channel && config.contactGoal) {
       window.ym(config.counterId, "reachGoal", config.contactGoal, { channel, page: safePath });
+    } else if (isVideoLink(link) && config.videoGoal) {
+      window.ym(config.counterId, "reachGoal", config.videoGoal, { type: "telegram_channel", page: safePath });
     } else if (!channel && config.contentGoal) {
       const target = new URL(link.href);
       const path = target.pathname;
