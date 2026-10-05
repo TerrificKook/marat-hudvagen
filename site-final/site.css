@@ -41,6 +41,7 @@
 .is-final .header-contact svg{width:20px;height:20px;flex:none}
 .is-final .header-contact:hover,.is-final .header-contact:focus-visible{background:#26222c;color:#fff}
 @media(max-width:1000px){.is-final .topbar nav .nav-section{display:inline-flex}}
+@media(min-width:701px) and (max-width:900px){.is-final .contact-word{display:none}.is-final .header-contact{width:40px;height:40px;min-height:40px;padding:0}}
 @media(max-width:700px){
  .is-final .site-topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 4px;padding:13px 20px 11px}
  .is-final .site-topbar .brand{min-width:0}
@@ -50,7 +51,7 @@
  .is-final .header-contacts{grid-column:2;grid-row:1;gap:4px}
  .is-final .header-contact{width:40px;height:40px;min-height:40px;padding:0}
  .is-final .contact-word{display:none}
- .is-final .top-links{grid-column:1/-1;grid-row:2;margin:0;padding-top:6px;gap:24px;font-size:12px}
+ .is-final .top-links{grid-column:1/-1;grid-row:2;margin:0;padding-top:6px;gap:18px;font-size:12px}
  .is-final .top-links .nav-video{display:none}
 }
 @media(max-width:360px){.is-final .header-contact{width:36px;height:36px;min-height:36px}.is-final .site-topbar .brand small{font-size:7px}}
