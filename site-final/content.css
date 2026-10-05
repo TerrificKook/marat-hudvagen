@@ -1,0 +1,53 @@
+/* Static service pages share the site's typography and contact links. */
+.content-site{background:#d9d6e6;color:#26222c}
+.content-site .site-topbar{gap:22px}
+.content-site .brand{flex-shrink:0}
+.content-site .brand-truck{width:38px;height:38px;border-radius:9px}
+.content-site .brand b{font-size:21px;letter-spacing:-.055em}
+.content-site .brand small{font-size:8px;letter-spacing:.07em}
+.content-site .top-links{margin-left:auto;display:flex;gap:22px;font-size:12px}
+.content-site .top-links a{white-space:nowrap}
+.content-site .header-contacts{display:flex;gap:6px}
+.content-site .header-contact{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:7px 10px;border:1px solid;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap}
+.content-site .header-contact svg{width:20px;height:20px;flex:none}
+.content-site .header-contact:hover{background:#26222c;color:#fff}
+.content-main{max-width:1380px;margin:0 auto;padding:28px var(--pad) 40px}
+.breadcrumbs{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;line-height:1.5}
+.breadcrumbs a{text-decoration:underline;text-underline-offset:3px}
+.mount-hero{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(260px,1fr);gap:65px;align-items:center;padding:62px 0}
+.mount-hero h1{font-size:clamp(45px,5.7vw,80px);line-height:1;letter-spacing:-.06em;margin:24px 0}
+.mount-hero h1 span{color:#9c2b16}
+.mount-hero p{max-width:660px}
+.content-lead{font-size:clamp(18px,1.7vw,23px);line-height:1.5;margin-bottom:18px}
+.content-actions{display:flex;flex-wrap:wrap;align-items:center;gap:22px;margin-top:25px}
+.content-site .btn{background:#26222c;color:#fff;border-radius:5px;min-height:48px;font-size:13px;padding:17px 23px}
+.content-site .text-link{font-size:13px;line-height:1.5}
+.task-card{padding:35px;border:1px solid #26222c;border-radius:8px;background:#f2efe6}
+.task-card h2{font-size:34px;line-height:1.08;letter-spacing:-.05em;margin:25px 0 18px}
+.task-card p{font-size:14px}
+.task-limit{border-top:1px solid #26222c35;margin:24px 0;padding-top:18px}
+.content-toc{display:flex;flex-wrap:wrap;gap:18px 35px;padding:22px 0;border-block:1px solid #26222c50;font-size:12px}
+.content-section{padding:64px 0;border-bottom:1px solid #26222c35}
+.content-section h2{font-size:clamp(32px,4.2vw,55px);line-height:1.05;letter-spacing:-.055em;margin:24px 0 30px}
+.service-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:35px 50px}
+.service-grid article{padding-top:18px;border-top:1px solid #26222c50}
+.service-grid article>span{font-size:11px}
+.service-grid h3{font-size:28px;line-height:1.1;letter-spacing:-.05em;margin:18px 0 14px}
+.service-grid p{max-width:490px;font-size:14px}
+.content-note{margin-top:30px;font-size:13px;max-width:75ch}
+.brief-steps{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;counter-reset:steps}
+.brief-steps li{counter-increment:steps;border-top:1px solid #26222c50;padding-top:16px}
+.brief-steps li::before{content:"0" counter(steps);display:block;font-size:11px;margin-bottom:15px}
+.brief-steps b{display:block;font-size:17px;margin-bottom:12px}
+.brief-steps p{font-size:13px}
+.transport-section>p:not(.eyebrow){max-width:75ch;margin-bottom:18px}
+.content-faq{border-top:1px solid #26222c50}
+.content-faq details{padding:22px 0;border-bottom:1px solid #26222c50;scroll-margin-top:24px}
+.content-faq summary{font-size:18px;font-weight:650;line-height:1.4;cursor:pointer;letter-spacing:-.025em}
+.content-faq p{font-size:15px;padding-top:18px;max-width:78ch}
+.content-faq p a{text-decoration:underline;text-underline-offset:3px}
+.content-contact{border-bottom:0}
+.content-footer{padding:25px var(--pad) 45px;display:flex;flex-wrap:wrap;gap:18px 30px;border-top:1px solid #26222c35;font-size:12px}
+@media(max-width:1000px){.mount-hero{gap:30px;grid-template-columns:minmax(0,1.3fr) minmax(240px,1fr)}.task-card{padding:25px}.content-site .site-topbar{flex-wrap:wrap}.brief-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.content-site .site-topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 4px;padding:13px 20px 11px}.content-site .brand{min-width:0;gap:9px}.content-site .brand b{font-size:17px}.content-site .brand small{font-size:7px;letter-spacing:.02em}.content-site .brand-truck{width:32px;height:32px}.content-site .header-contacts{grid-column:2;grid-row:1;gap:4px}.content-site .header-contact{width:40px;height:40px;min-height:40px;padding:0}.content-site .contact-word{display:none}.content-site .top-links{grid-column:1/-1;grid-row:2;margin:0;padding-top:6px;gap:24px}.content-main{padding:22px 20px 30px}.mount-hero{grid-template-columns:1fr;gap:32px;padding:38px 0}.mount-hero h1{font-size:clamp(40px,10.5vw,65px)}.mount-hero .eyebrow{font-size:9px}.mount-hero p{font-size:14px}.mount-hero .content-lead{font-size:18px}.task-card{padding:24px}.task-card h2{font-size:30px}.content-actions{gap:18px}.content-site .btn{font-size:12px;padding:15px 18px}.content-toc{gap:16px;font-size:11px}.content-section{padding:42px 0}.content-section h2{font-size:35px;margin:20px 0 25px}.service-grid{grid-template-columns:1fr;gap:25px}.service-grid h3{font-size:26px}.service-grid p{font-size:14px}.brief-steps{gap:25px 20px}.brief-steps b{font-size:15px}.brief-steps p{font-size:12px}.content-faq summary{font-size:16px}.content-faq p{font-size:14px}.content-footer{padding:25px 20px 35px}}
+@media(max-width:360px){.content-site .header-contact{width:36px;height:36px;min-height:36px}.brief-steps{grid-template-columns:1fr}.mount-hero h1{font-size:39px}}

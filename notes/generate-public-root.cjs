@@ -30,4 +30,6 @@ const structuredData=JSON.stringify(service).replaceAll('<','\\u003c');
 html=html.replace('</head>',`${verificationTags.join('')}<link rel="canonical" href="${base}"><meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="${base}"><meta property="og:image" content="${base}site-final/assets/van-city-1280.webp"><script type="application/ld+json">${structuredData}</script></head>`);
 fs.writeFileSync(path.join(root,'index.html'),html);
 fs.writeFileSync(path.join(root,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${base}sitemap.xml\n`);
-fs.writeFileSync(path.join(root,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${base}</loc></url></urlset>\n`);
+const publicUrls=[base,`${base}montazh-dekoracij/`];
+if(!fs.existsSync(path.join(root,'montazh-dekoracij/index.html')))throw Error('Missing mounting service page');
+fs.writeFileSync(path.join(root,'sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${publicUrls.map(url=>`<url><loc>${url}</loc></url>`).join('')}</urlset>\n`);

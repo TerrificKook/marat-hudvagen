@@ -3,7 +3,8 @@ const fs=require('fs');
 const path=require('path');
 const {execFileSync}=require('child_process');
 const root=path.resolve(process.argv[2]||path.join(__dirname,'..'));
-const pages=['concepts/index.html','concepts/concept-a/index.html','concepts/concept-b/index.html','concepts/concept-c/index.html','site-final/index.html','site-final/brief.html','site-final/privacy.html'];
+const pages=['concepts/index.html','concepts/concept-a/index.html','concepts/concept-b/index.html','concepts/concept-c/index.html','site-final/index.html','site-final/brief.html','site-final/privacy.html','montazh-dekoracij/index.html'];
+const publicPages=new Set(['index.html','montazh-dekoracij/index.html']);
 if(fs.existsSync(path.join(root,'.nojekyll')))pages.push('index.html');
 const issues=[];let resources=0;
 if(pages.includes('index.html')){
@@ -37,10 +38,16 @@ for(const page of pages){
  if((html.match(/<h1\b/g)||[]).length!==1)issues.push(`${page}: H1 count`);
  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
  if(new Set(ids).size!==ids.length)issues.push(`${page}: duplicate IDs`);
- if(page==='index.html'?!/name="robots" content="index, follow/.test(html):!/name="robots" content="noindex/.test(html))issues.push(`${page}: missing noindex`);
+ if(publicPages.has(page)?!/name="robots" content="index, follow/.test(html):!/name="robots" content="noindex/.test(html))issues.push(`${page}: incorrect indexing directive`);
+ if(page==='montazh-dekoracij/index.html'){
+  const base=`https://${fs.readFileSync(path.join(root,'CNAME'),'utf8').trim().toLowerCase()}/`;
+  if(!html.includes(`<link rel="canonical" href="${base}montazh-dekoracij/"`))issues.push(`${page}: incorrect canonical`);
+  const service=[...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(m=>JSON.parse(m[1]));
+  if(service.length!==1||service[0]['@type']!=='Service'||service[0].offers)issues.push(`${page}: service schema or unconfirmed price`);
+ }
  if(/\b(?:2019|2009)\b/.test(html))issues.push(`${page}: vehicle year should be omitted`);
  if(/Контакт уточняется|контакт Марата пока уточняется|TODO/.test(html))issues.push(`${page}: stale placeholder`);
- if(!['concepts/index.html','site-final/privacy.html'].includes(page)){
+ if(!['concepts/index.html','site-final/privacy.html','montazh-dekoracij/index.html'].includes(page)){
   if(/13 000|1 300/.test(html))issues.push(`${page}: outdated tariff`);
   for(const amount of ['14 000','1 400','65 ₽'])if(!html.includes(amount))issues.push(`${page}: missing tariff ${amount}`);
  }
