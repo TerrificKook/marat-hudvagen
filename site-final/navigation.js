@@ -5,9 +5,10 @@
     let id;
     try { id = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
     const target = id && document.getElementById(id);
-    if (target && target.tagName === 'DETAILS') {
-      target.open = true;
-      requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+    const answer = target && target.closest('details');
+    if (answer) {
+      answer.open = true;
+      requestAnimationFrame(() => answer.scrollIntoView({ block: 'start' }));
     }
   };
   openLinkedAnswer();
