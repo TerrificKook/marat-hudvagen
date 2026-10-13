@@ -1,0 +1,27 @@
+/* Reading page: restrained width and visible section boundaries. */
+.article-site .content-main{max-width:1080px}
+.article-hero{padding:60px 0 38px}
+.article-hero h1{font-size:clamp(36px,5.3vw,68px);line-height:1.06;letter-spacing:-.055em;margin:24px 0 28px;overflow-wrap:break-word}
+.article-site p,.article-site dd,.article-checklist{line-height:1.7}
+.article-site p{max-width:76ch;margin-bottom:18px}
+.article-site dfn{font-style:normal;font-weight:700}
+.article-site .content-toc a{padding:8px 12px;border:1px solid #26222c50;border-radius:6px}
+.article-site .content-toc{gap:10px}
+.term-list{margin:0;border-top:1px solid #26222c50}
+.term-list>div{display:grid;grid-template-columns:1fr 2fr;gap:30px;padding:25px 0;border-bottom:1px solid #26222c35}
+.term-list dt{font-size:20px;font-weight:700;line-height:1.4}
+.term-list dd{margin:0;font-size:15px}
+.article-site .article-note{margin-top:25px;padding:20px 24px;background:#f2efe6;border-left:3px solid #9c2b16}
+.article-sources{font-size:13px;margin-top:20px}
+.article-sources summary{cursor:pointer;text-decoration:underline;text-underline-offset:4px}
+.article-sources p{padding-top:16px}
+.article-site .service-grid>div{border-top:1px solid #26222c50;padding-top:12px}
+.article-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin:30px 0}
+.article-photos figure{margin:0;min-width:0}
+.article-photos img{display:block;width:100%;height:auto;border-radius:5px}
+.article-photos figcaption{font-size:12px;line-height:1.6;margin-top:12px}
+.article-links{display:flex;flex-wrap:wrap;gap:15px 28px}
+.article-links a,.article-sources a{text-decoration:underline;text-underline-offset:4px}
+.article-checklist{padding-left:24px;margin-bottom:28px}
+.article-checklist li{padding-left:8px;margin:0 0 16px;max-width:74ch}
+@media(max-width:700px){.article-hero{padding:34px 0 24px}.article-hero h1{font-size:clamp(34px,9.2vw,54px)}.article-site .content-section h2{font-size:clamp(29px,8vw,35px)}.term-list>div{grid-template-columns:1fr;gap:12px}.article-photos{grid-template-columns:1fr;gap:28px}.article-site .article-note{padding:18px}.article-site .content-toc a{font-size:12px}.article-site .content-lead{font-size:18px}}
