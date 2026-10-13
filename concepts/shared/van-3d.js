@@ -14,6 +14,13 @@
     {title:'Грузим.<br>Без суеты.',copy:'Задняя погрузка и гидроборт. Размеры, вес и помощь при погрузке согласуем заранее.',word:'ПОГРУЗКА.',photo:'tail-lift',alt:'Открытый кузов с опущенным гидробортом',bg:'#e8ff4f',ink:'#232127'},
     {title:'Цех<br>на колёсах.',copy:'Машина и человек, который может подключиться к работе руками. Объём помощи обсуждаем отдельно.',word:'В РАБОТЕ.',photo:'van-autumn',alt:'Худваген Марата на осенней локации',bg:'#24212c',ink:'#efebdf'}
   ];
+  // The chosen public layout pairs the illustration with the owner's current photos.
+  // Keep archived concepts on their original content.
+  if(document.body.classList.contains('is-final')){
+    Object.assign(stages[1],{title:'Место<br>для реквизита.',copy:'Стеллажи у борта и свободный проход. Состав, размеры и вес груза согласуем до выезда.',photo:'hudwagen-cargo-space',alt:'Свободный центральный проход и стеллажи внутри худвагена'});
+    Object.assign(stages[2],{title:'Тележки.<br>Гидроборт.',copy:'Ящики и рабочая поверхность на колёсах. Нужные тележки и помощь при погрузке обсуждаем заранее.',photo:'hudwagen-work-cart',alt:'Тележка с открытыми ящиками на опущенном гидроборте'});
+    Object.assign(stages[3],{title:'Рабочая база<br>на точке.',copy:'Тележки у борта, материалы и инструмент рядом. Комплект и участие Марата в работе согласуем под проект.',photo:'hudwagen-workspace',alt:'Кузов худвагена с тележками у борта и свободным проходом'});
+  }
   const story=document.querySelector('.story-scroll'),stage=document.querySelector('.story-stage');
   let progress=0,active=-1,queued=false;
   const views=canvases.map(canvas=>({canvas,ctx:canvas.getContext('2d'),w:0,h:0,visible:true}));
