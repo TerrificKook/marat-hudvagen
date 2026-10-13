@@ -59,3 +59,7 @@
 .mount-tools figcaption{font-size:11px;line-height:1.5;margin-top:14px}
 .mount-tools p:not(.eyebrow){font-size:15px;line-height:1.65;margin-bottom:20px;max-width:65ch}
 @media(max-width:700px){.mount-tools{grid-template-columns:1fr;gap:30px}.mount-tools figure{max-width:none}.mount-tools img{aspect-ratio:4/3}.mount-tools p:not(.eyebrow){font-size:14px}}
+
+/* Header is in normal flow: section links should start at the section boundary. */
+html{scroll-padding-top:0}
+.content-main,.content-section,.mount-tools{scroll-margin-top:0}

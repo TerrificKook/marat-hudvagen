@@ -1,4 +1,8 @@
 /* Chosen C: service first, transformation second. */
+/* The header scrolls away; anchor targets need no fixed-header offset. */
+html{scroll-padding-top:0}
+#main,#transformation,#real,#configuration,#equipment,#terms,#contact{scroll-margin-top:0}
+#questions,#equipment-included,#layout-question{scroll-margin-top:24px}
 .is-final .service-hero{display:grid;grid-template-columns:1.08fr 1fr;gap:0 24px;padding:48px var(--pad) 28px;min-height:calc(100svh - 86px);position:relative;overflow:hidden;align-content:center}
 .service-copy{position:relative;z-index:3;align-self:center;padding-bottom:32px}
 .service-copy>.eyebrow{font-size:10px;letter-spacing:.08em;margin-bottom:25px}
@@ -60,7 +64,7 @@
 .faq-intro{margin-top:60px;max-width:820px}.faq-intro h2{font-size:clamp(25px,3vw,40px);line-height:1.08;letter-spacing:-.045em;margin-bottom:22px}.faq-intro p{font-size:14px;line-height:1.65;margin-bottom:16px}.faq-intro+.faq{margin-top:30px}.faq p a{text-decoration:underline;text-underline-offset:3px}.service-benefits p .text-link{display:inline-block;margin-top:12px}
 
 /* Owner photos: useful captions and stable anchors alongside the animated story. */
-#real,#configuration,#equipment,#equipment-included,#layout-question{scroll-margin-top:28px}
+.is-final .real-photos,.is-final .equipment-section{padding-inline:max(var(--pad),calc((100% - 1440px)/2))}
 .is-final .real-photos h2{margin-top:24px}
 .photo-intro{max-width:340px;padding-top:8px}.photo-intro p{margin-bottom:22px}.photo-intro .text-link{font-size:12px}
 .is-final .van-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
@@ -73,7 +77,7 @@
 .photo-number{font-size:9px;letter-spacing:.07em;opacity:.75}
 .photo-card h3{font-size:clamp(21px,2vw,29px);line-height:1.12;letter-spacing:-.04em;margin:10px 0 12px}
 .photo-card figcaption p{font-size:13px;line-height:1.6;max-width:43ch}
-.photo-card figcaption a{text-decoration:underline;text-underline-offset:3px}
+.photo-card figcaption a{display:inline-block;text-decoration:underline;text-underline-offset:3px}
 .configuration{margin-top:64px;border-top:1px solid #efeadd45;padding-top:38px}
 .configuration h3{font-size:clamp(30px,3.4vw,49px);line-height:1.08;letter-spacing:-.045em;margin:20px 0}
 .configuration-lead{max-width:74ch;font-size:15px;line-height:1.65}
