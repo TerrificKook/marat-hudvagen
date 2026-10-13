@@ -1,0 +1,13 @@
+.useful-hub .article-hero{padding:36px 0 20px}.useful-hub .article-hero h1{font-size:clamp(36px,4.5vw,54px);margin:18px 0 22px}.useful-hub .content-section{padding-top:40px}
+.reading-grid,.question-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+.reading-card{display:flex;flex-direction:column;border:1px solid #26222c40;border-radius:10px;overflow:hidden;background:#f2efe6;text-decoration:none;transition:border-color .18s,background .18s}
+.reading-card:hover{border-color:#26222c;background:#fffdf5}.reading-card:focus-visible{outline:2px solid #26222c;outline-offset:4px}
+.reading-card img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:50% 45%}
+.reading-card>div{padding:26px;display:flex;flex-direction:column;flex:1}.reading-card h3{font-size:27px;line-height:1.15;letter-spacing:-.04em;margin:18px 0}
+.reading-card p{font-size:14px}.reading-more{font-size:13px;font-weight:650;margin-top:auto;padding-top:14px}
+.question-groups{margin-top:30px;gap:40px}.question-groups h3{font-size:23px;line-height:1.2;margin:0 0 20px}
+.question-links{list-style:none;padding:0;margin:0;border-top:1px solid #26222c40}.question-links li{border-bottom:1px solid #26222c40}
+.question-links a{display:block;padding:17px 0;font-size:15px;line-height:1.5}.question-links a:hover{text-decoration:underline;text-underline-offset:4px}
+.article-site .content-section p a{text-decoration:underline;text-underline-offset:4px}
+@media(max-width:700px){.reading-grid,.question-groups{grid-template-columns:1fr}.reading-card>div{padding:22px}.reading-card h3{font-size:25px}}
+@media(prefers-reduced-motion:reduce){.reading-card{transition:none}}

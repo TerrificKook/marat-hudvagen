@@ -10,3 +10,9 @@
 .content-site .back-to-top{bottom:24px}
 @media(max-width:700px){:is(.is-final,.content-site) .top-links a{padding:9px 4px}.back-to-top{right:12px;bottom:78px;padding:9px 12px}.content-site .back-to-top{bottom:16px}}
 @media(prefers-reduced-motion:reduce){:is(.is-final,.content-site) .top-links a{transition:none}}
+
+.site-directory{display:flex;flex-wrap:wrap;gap:14px 25px;padding:24px 0;margin-top:28px;border-top:1px solid #8886;font-size:13px;line-height:1.5}
+.site-directory a{text-decoration:underline;text-underline-offset:4px}.content-footer .site-directory{flex-basis:100%;margin:0;border:0;padding:0}
+.context-reading{font-size:14px;line-height:1.6;margin-top:24px}.context-reading a{text-decoration:underline;text-underline-offset:4px}
+.top-links a[aria-current="page"]{background:#f2efe6}
+@media(max-width:700px){.site-directory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;font-size:12px}.content-site .top-links{flex-wrap:wrap}}
