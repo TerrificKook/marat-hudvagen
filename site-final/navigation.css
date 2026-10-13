@@ -1,0 +1,12 @@
+/* Shared section controls and a return to the page header. */
+:is(.is-final,.content-site) .top-links{gap:8px}
+:is(.is-final,.content-site) .top-links a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 12px;border:1px solid #26222c40;border-radius:10px;background:#ffffff30;line-height:1.25;transition:background .18s,border-color .18s}
+:is(.is-final,.content-site) .top-links a:hover{background:#ffffff70;border-color:#26222c80}
+:is(.is-final,.content-site) .top-links a:focus-visible,.back-to-top:focus-visible{outline:2px solid #26222c;outline-offset:3px}
+.back-to-top{position:fixed;right:24px;bottom:88px;z-index:59;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:10px 14px;border:1px solid #26222c55;border-radius:12px;background:#f2efe6;color:#26222c;font-size:12px;font-weight:650;box-shadow:0 3px 14px #00000016}
+.back-to-top[hidden]{display:none}
+.back-to-top:hover{background:#fffdf2;border-color:#26222c}
+.back-to-top span[aria-hidden]{font-size:18px;line-height:1}
+.content-site .back-to-top{bottom:24px}
+@media(max-width:700px){:is(.is-final,.content-site) .top-links a{padding:9px 4px}.back-to-top{right:12px;bottom:78px;padding:9px 12px}.content-site .back-to-top{bottom:16px}}
+@media(prefers-reduced-motion:reduce){:is(.is-final,.content-site) .top-links a{transition:none}}
