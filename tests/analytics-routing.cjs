@@ -14,7 +14,7 @@ let choice = "allow";
 const location = new URL("https://www.hudwagen.ru/");
 const sandbox = {
   URL, URLSearchParams, location,
-  localStorage: { getItem: () => JSON.stringify({ status: choice, version: 2, at: now, until: now + 60000 }) },
+  localStorage: { getItem: () => JSON.stringify({ status: choice, version: 3, at: now, until: now + 60000 }) },
   sessionStorage: { getItem: () => null },
   document: { readyState: "loading", cookie: "", addEventListener: (name, handler) => { listeners[name] = handler; } },
   window: { addEventListener() {}, ym: (...args) => calls.push(args) }
