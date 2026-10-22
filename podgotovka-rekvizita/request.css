@@ -1,0 +1,13 @@
+.transport-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin:28px 0}
+.transport-options>div{border-top:1px solid #26222c50;padding-top:20px;min-width:0}
+.transport-options h3,.route-example h3,.request-card h3{font-size:24px;line-height:1.25;letter-spacing:-.025em;margin:0 0 16px}
+.transport-options a{text-decoration:underline;text-underline-offset:4px}
+.route-example{border-top:1px solid #26222c35;margin-top:30px;padding-top:26px}
+.request-card{background:#f2efe6;border:1px solid #26222c40;border-radius:10px;padding:clamp(20px,4vw,36px);margin:30px 0}
+.request-card #transport-request-label{display:block;font-size:14px;font-weight:650;margin:22px 0 10px}
+.request-card pre{display:block;box-sizing:border-box;width:100%;max-width:100%;min-height:330px;white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid #706b76;border-radius:6px;background:#fffdf8;color:#26222c;padding:16px;font:inherit;font-size:16px;line-height:1.65;margin-bottom:20px}
+.request-card .btn{background:#26222c;color:#fffdf8;border:0;cursor:pointer;font:inherit;font-weight:650;min-height:48px}
+.request-card .btn[hidden]{display:none}
+.request-card pre:focus-visible,.request-card .btn:focus-visible{outline:3px solid #9c2b16;outline-offset:4px}
+.request-card .copy-status{min-height:1.7em;font-size:14px;margin:14px 0 0}
+@media(max-width:700px){.transport-options{grid-template-columns:1fr;gap:22px}.request-card pre{min-height:440px}.request-card .btn{width:100%}}
